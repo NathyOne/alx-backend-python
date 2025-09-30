@@ -24,7 +24,7 @@ def stream_users(query, host='localhost', user='root', password='', database='')
     connection.close()
 
 
-for row in stream_rows(
+for row in stream_users(
     query="SELECT * FROM user_data LIMIT 6",
     host="localhost",
     user="root",
