@@ -1,7 +1,7 @@
 import mysql.connector
 
 
-def stream_rows(query, host='localhost', user='root', password='', database=''):
+def stream_users(query, host='localhost', user='root', password='', database=''):
     connection = mysql.connector.connect(
         host=host,
         user=user,
