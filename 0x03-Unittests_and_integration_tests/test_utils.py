@@ -20,4 +20,4 @@ class TestAccessNestedMap(unittest.TestCase):
         self.assertEqual(access_nested_map(nested_map, path), expected)
 
     def __str__(self):
-        return f"expected: {self.expected}: path: {self.path}"
+        return f"Expected: {self.expected}: Got: {self.path}"
