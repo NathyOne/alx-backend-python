@@ -39,25 +39,20 @@ def batch_processing(batch_size):
     """
     Processes each batch to filter users over age 25
     """
-    # Loop 1: Iterate through batches from generator
     for batch in stream_users_in_batches(batch_size):
         users_over_25 = []
 
-        # Loop 2: Process each user in the current batch
         for user in batch:
             if user['age'] > 25:
                 users_over_25.append(user)
 
-        yield users_over_25  # Yield filtered results for this batch
-
-# Usage - only 1 loop in the main code
+        yield users_over_25
 
 
 def main():
     """
     Main function to demonstrate the batch processing
     """
-    # Loop 3: Process and display results
     for filtered_batch in batch_processing(batch_size=6):
         print(f"Batch with {len(filtered_batch)} users over age 25:")
         for user in filtered_batch:
