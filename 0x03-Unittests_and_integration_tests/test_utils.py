@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
-
+# #!/usr/bin/env python3
 from utils import get_json
 from unittest.mock import patch, Mock
 import unittest
 from parameterized import parameterized
+
 from utils import access_nested_map
 
 
@@ -30,54 +30,22 @@ class TestAccessNestedMap(unittest.TestCase):
         self.assertEqual(str(context.exception), expected_message)
 
 
-# Import the external library
-
-# Assuming utils.py is available or the function is imported correctly
-
-
 class TestGetJson(unittest.TestCase):
-    """Tests for the utils.get_json function using @parameterized."""
-
-    # 1. Define the test data
-    # Each tuple in the list represents one call to the test method.
-    # The elements in the tuple map to the arguments of the test method.
-    DATA = [
-        ("http://example.com", {"payload": True}),
-        ("http://holberton.io", {"payload": False}),
-    ]
-
-    # 2. Use the decorator to expand the test
-    @parameterized.expand(DATA)
     @patch('requests.get')
-    def test_get_json(self, mock_requests_get, test_url, test_payload):
-        """
-        Tests that get_json returns the expected JSON payload 
-        and calls requests.get exactly once with the correct URL.
-        """
-        # The arguments are: self, the patched object, and the data from the list (in order)
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),    # ← Tuple 1
+        ("http://holberton.io", {"payload": False})   # ← Tuple 2
+    ])
+    def test_get_json(self, test_url, test_payload, mock_get):
+        response = Mock()
+        response.json.return_value = test_payload
+        mock_get.return_value = response
 
-        # 3. Configure the Mock object
-        # Create a Mock object for the response
-        mock_response = Mock()
+        getJson = get_json(test_url)
 
-        # Configure the return value of its '.json()' method
-        mock_response.json.return_value = test_payload
+        mock_get.assert_called_once_with(test_url)
 
-        # Configure the return value of the patched function itself
-        mock_requests_get.return_value = mock_response
+        self.assertEqual(getJson, test_payload)
 
-        # 4. Call the function under test
-        result = get_json(test_url)
-
-        # 5. Assert the behavior (Verification)
-
-        # Test that the mocked get method was called exactly once
-        # with test_url as argument.
-        mock_requests_get.assert_called_once_with(test_url)
-
-        # Test that the output of get_json is equal to test_payload.
-        self.assertEqual(result, test_payload)
-
-# To run the tests, you would typically use:
-# if __name__ == '__main__':
-#     unittest.main()
+        if __name__ == '__main__':
+            unittest.main()
