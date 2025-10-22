@@ -30,23 +30,51 @@ class TestAccessNestedMap(unittest.TestCase):
         self.assertEqual(str(context.exception), expected_message)
 
 
+# class TestGetJson(unittest.TestCase):
+#     @patch('requests.get')
+#     @parameterized.expand([
+#         ("http://example.com", {"payload": True}),    # ← Tuple 1
+#         ("http://holberton.io", {"payload": False})   # ← Tuple 2
+#     ])
+#     def test_get_json(self, test_url, test_payload, mock_get):
+#         response = Mock()
+#         response.json.return_value = test_payload
+#         mock_get.return_value = response
+
+#         getJson = get_json(test_url)
+
+#         mock_get.assert_called_once_with(test_url)
+
+#         self.assertEqual(getJson, test_payload)
+
+
+# if __name__ == '__main__':
+
+#     unittest.main()
+
+
 class TestGetJson(unittest.TestCase):
-    @patch('requests.get')
-    @parameterized.expand([
-        ("http://example.com", {"payload": True}),    # ← Tuple 1
-        ("http://holberton.io", {"payload": False})   # ← Tuple 2
-    ])
-    def test_get_json(self, test_url, test_payload, mock_get):
-        response = Mock()
-        response.json.return_value = test_payload
-        mock_get.return_value = response
 
-        getJson = get_json(test_url)
+    def test_get_json(self):
+        """Test get_json with multiple test cases"""
+        test_cases = [
+            ("http://example.com", {"payload": True}),
+            ("http://holberton.io", {"payload": False})
+        ]
 
-        mock_get.assert_called_once_with(test_url)
+        for test_url, test_payload in test_cases:
+            with self.subTest(url=test_url, payload=test_payload):
+                with patch('utils.requests.get') as mock_get:
+                    mock_response = Mock()
+                    mock_response.json.return_value = test_payload
+                    mock_get.return_value = mock_response
 
-        self.assertEqual(getJson, test_payload)
+                    result = get_json(test_url)
+
+                    mock_get.assert_called_once_with(test_url)
+                    self.assertEqual(result, test_payload)
 
 
 if __name__ == '__main__':
+
     unittest.main()
