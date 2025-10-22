@@ -1,4 +1,4 @@
-# #!/usr/bin/env python3
+#!/usr/bin/env python3
 from utils import get_json
 from unittest.mock import patch, Mock
 import unittest
