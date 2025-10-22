@@ -47,5 +47,6 @@ class TestGetJson(unittest.TestCase):
 
         self.assertEqual(getJson, test_payload)
 
-        if __name__ == '__main__':
-            unittest.main()
+
+if __name__ == '__main__':
+    unittest.main()
