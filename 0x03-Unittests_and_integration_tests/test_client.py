@@ -2,7 +2,7 @@
 
 from parameterized import parameterized
 from unittest.mock import patch, Mock
-from utils import GithubOrgClient
+import utils
 import unittest
 
 
@@ -14,11 +14,10 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_org(self, url, payload):
         with patch('utils.requests.get') as mock_get:
             mock_response = Mock()
-            print(mock_response)
             mock_response.json.return_value = payload
             mock_get.return_value = mock_response
 
-            client = GithubOrgClient(url)
+            client = utils.GithubOrgClient(url)
             result = client.org()
 
             self.assertEqual(result, payload)
