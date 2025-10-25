@@ -17,6 +17,8 @@ def get_json(url):
     """Get JSON from remote URL."""
     response = requests.get(url)
     return response.json()
+
+
 def memoize(func):
     """Memoize decorator for methods."""
     cache = {}
@@ -28,5 +30,12 @@ def memoize(func):
         return cache[key]
 
     return wrapper
-    
 
+
+class GithubOrgClient:
+    def __init__(self, url):
+        self.url = url
+
+    def org(self):
+        response = requests.get(self.url)
+        return response.json()
