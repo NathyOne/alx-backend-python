@@ -51,32 +51,43 @@ from utils import access_nested_map
 #                     mock_get.assert_called_once_with(test_url)
 #                     self.assertEqual(result, test_payload)
 
+import unittest
+from unittest.mock import patch
+from utils import memoize
+
 
 class TestMemoize(unittest.TestCase):
-    def test_memoize(self):
-        class TestClass:
-            call_count = 0
+    """Test class for memoize decorator functionality"""
 
+    def test_memoize(self):
+        """Test that memoize caches the result and calls the method only once"""
+
+        class TestClass:
             def a_method(self):
-                TestClass.call_count += 1
                 return 42
 
             @memoize
             def a_property(self):
                 return self.a_method()
 
-        # Reset call count
-        TestClass.call_count = 0
-        obj = TestClass()
+        # Create an instance of TestClass
+        test_instance = TestClass()
 
-        # Call the memoized property multiple times
-        result1 = obj.a_property
-        result2 = obj.a_property
+        # Use patch to mock a_method and track its calls
+        with patch.object(test_instance, 'a_method') as mock_method:
+            # Configure the mock to return a specific value
+            mock_method.return_value = 42
 
-        # Assertions
-        self.assertEqual(result1, 42)
-        self.assertEqual(result2, 42)
-        self.assertEqual(TestClass.call_count, 1)  # a_method should be called only once
+            # Call a_property twice
+            result1 = test_instance.a_property()
+            result2 = test_instance.a_property()
+
+            # Assert that the correct result is returned both times
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
+
+            # Assert that a_method was called only once due to memoization
+            mock_method.assert_called_once()
 
 
 if __name__ == '__main__':
