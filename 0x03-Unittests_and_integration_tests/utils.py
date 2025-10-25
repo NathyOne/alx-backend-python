@@ -17,3 +17,16 @@ def get_json(url):
     """Get JSON from remote URL."""
     response = requests.get(url)
     return response.json()
+def memoize(func):
+    """Memoize decorator for methods."""
+    cache = {}
+
+    def wrapper(self, *args, **kwargs):
+        key = (id(self), args, frozenset(kwargs.items()) if kwargs else args)
+        if key not in cache:
+            cache[key] = func(self, *args, **kwargs)
+        return cache[key]
+
+    return wrapper
+    
+
